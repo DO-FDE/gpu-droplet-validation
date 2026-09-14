@@ -68,7 +68,7 @@ concurrently, with no cross-node coordination. See
 
 ```bash
 curl -fsSL \
-  "https://github.com/DO-Solutions/gpu-droplet-validation/releases/latest/download/gpu-droplet-validation-latest.tgz" \
+  "https://github.com/DO-FDE/gpu-droplet-validation/releases/latest/download/gpu-droplet-validation-latest.tgz" \
   | tar --no-same-owner -xz
 
 # one node
