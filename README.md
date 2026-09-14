@@ -41,7 +41,7 @@ Download and extract the latest release, then run `run.sh` for your SKU:
 
 ```bash
 curl -fsSL \
-  "https://github.com/DO-Solutions/gpu-droplet-validation/releases/latest/download/gpu-droplet-validation-latest.tgz" \
+  "https://github.com/DO-FDE/gpu-droplet-validation/releases/latest/download/gpu-droplet-validation-latest.tgz" \
   | tar --no-same-owner -xz
 
 sudo ./run.sh --gpu-model nvidia-b300 --gpu-count 8 \
