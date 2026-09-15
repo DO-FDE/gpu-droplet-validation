@@ -59,7 +59,7 @@ spec:
       hostPath: { path: /dev/dri, type: Directory }
   containers:
     - name: rvs
-      image: ghcr.io/do-solutions/gpu-droplet-validation/rvs:latest
+      image: ghcr.io/do-fde/gpu-droplet-validation/rvs:latest
       imagePullPolicy: Always
       # Default entrypoint: run RVS once with the vendored conf and exit.
       securityContext:

@@ -24,7 +24,7 @@ x-common-env: &common-env
 
 services:
   prereqs:
-    image: ghcr.io/do-solutions/gpu-droplet-validation/prereqs-nvidia:${VERSION:-latest}
+    image: ghcr.io/do-fde/gpu-droplet-validation/prereqs-nvidia:${VERSION:-latest}
     container_name: dv-prereqs
     privileged: true
     network_mode: host
@@ -36,7 +36,7 @@ services:
     <<: *gpu
 
   setup:
-    image: ghcr.io/do-solutions/gpu-droplet-validation/setup-nvidia:${VERSION:-latest}
+    image: ghcr.io/do-fde/gpu-droplet-validation/setup-nvidia:${VERSION:-latest}
     container_name: dv-setup
     privileged: true
     network_mode: host
@@ -51,7 +51,7 @@ services:
     <<: *gpu
 
   dcgm-diag:
-    image: ghcr.io/do-solutions/gpu-droplet-validation/dcgm-diag:${VERSION:-latest}
+    image: ghcr.io/do-fde/gpu-droplet-validation/dcgm-diag:${VERSION:-latest}
     container_name: dv-dcgm-diag
     privileged: true
     network_mode: host
@@ -66,7 +66,7 @@ services:
     <<: *gpu
 
   nccl-allreduce:
-    image: ghcr.io/do-solutions/gpu-droplet-validation/nccl-tests-nvidia:${VERSION:-latest}
+    image: ghcr.io/do-fde/gpu-droplet-validation/nccl-tests-nvidia:${VERSION:-latest}
     container_name: dv-nccl-allreduce
     privileged: true
     network_mode: host
@@ -82,7 +82,7 @@ services:
     <<: *gpu
 
   nccl-alltoall:
-    image: ghcr.io/do-solutions/gpu-droplet-validation/nccl-tests-nvidia:${VERSION:-latest}
+    image: ghcr.io/do-fde/gpu-droplet-validation/nccl-tests-nvidia:${VERSION:-latest}
     container_name: dv-nccl-alltoall
     privileged: true
     network_mode: host
@@ -98,7 +98,7 @@ services:
     <<: *gpu
 
   teardown:
-    image: ghcr.io/do-solutions/gpu-droplet-validation/teardown-nvidia:${VERSION:-latest}
+    image: ghcr.io/do-fde/gpu-droplet-validation/teardown-nvidia:${VERSION:-latest}
     container_name: dv-teardown
     privileged: true
     network_mode: host
@@ -113,7 +113,7 @@ services:
     <<: *gpu
 
   tap-reporter:
-    image: ghcr.io/do-solutions/gpu-droplet-validation/tap-reporter:${VERSION:-latest}
+    image: ghcr.io/do-fde/gpu-droplet-validation/tap-reporter:${VERSION:-latest}
     container_name: dv-tap-reporter
     environment:
       <<: *common-env

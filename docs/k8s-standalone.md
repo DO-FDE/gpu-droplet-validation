@@ -276,7 +276,7 @@ device plugin only (no raw-device fallback — that path is AMD-specific).
 ### Binary path stability
 
 The path `/opt/nccl-tests/build/` is fixed by the pinned `nccl-tests` image
-(`ghcr.io/do-solutions/nccl-tests`, an upstream `nvidia/nccl-tests` mirror); it
+(`ghcr.io/do-fde/nccl-tests`, an upstream `nvidia/nccl-tests` mirror); it
 only moves on a deliberate base-image refresh. If a future image relocates the
 binary, drop the `command:` override to fall back to the entrypoint's `find_bin`
 (which then also re-applies the floor).

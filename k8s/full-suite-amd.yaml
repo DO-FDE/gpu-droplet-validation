@@ -73,7 +73,7 @@ spec:
           emptyDir: {}
       initContainers:
         - name: prereqs
-          image: ghcr.io/do-solutions/gpu-droplet-validation/prereqs-amd:latest
+          image: ghcr.io/do-fde/gpu-droplet-validation/prereqs-amd:latest
           imagePullPolicy: Always
           securityContext:
             privileged: true
@@ -99,7 +99,7 @@ spec:
             - name: results
               mountPath: /results
         - name: setup
-          image: ghcr.io/do-solutions/gpu-droplet-validation/setup-amd:latest
+          image: ghcr.io/do-fde/gpu-droplet-validation/setup-amd:latest
           imagePullPolicy: Always
           securityContext:
             privileged: true
@@ -125,7 +125,7 @@ spec:
             - name: results
               mountPath: /results
         - name: rvs
-          image: ghcr.io/do-solutions/gpu-droplet-validation/rvs:latest
+          image: ghcr.io/do-fde/gpu-droplet-validation/rvs:latest
           imagePullPolicy: Always
           securityContext:
             privileged: true
@@ -153,7 +153,7 @@ spec:
             - name: results
               mountPath: /results
         - name: rccl-allreduce
-          image: ghcr.io/do-solutions/gpu-droplet-validation/rccl-tests-amd:latest
+          image: ghcr.io/do-fde/gpu-droplet-validation/rccl-tests-amd:latest
           imagePullPolicy: Always
           securityContext:
             privileged: true
@@ -181,7 +181,7 @@ spec:
             - name: results
               mountPath: /results
         - name: rccl-alltoall
-          image: ghcr.io/do-solutions/gpu-droplet-validation/rccl-tests-amd:latest
+          image: ghcr.io/do-fde/gpu-droplet-validation/rccl-tests-amd:latest
           imagePullPolicy: Always
           securityContext:
             privileged: true
@@ -209,7 +209,7 @@ spec:
             - name: results
               mountPath: /results
         - name: teardown
-          image: ghcr.io/do-solutions/gpu-droplet-validation/teardown-amd:latest
+          image: ghcr.io/do-fde/gpu-droplet-validation/teardown-amd:latest
           imagePullPolicy: Always
           securityContext:
             privileged: true
@@ -236,7 +236,7 @@ spec:
               mountPath: /results
       containers:
         - name: tap-reporter
-          image: ghcr.io/do-solutions/gpu-droplet-validation/tap-reporter:latest
+          image: ghcr.io/do-fde/gpu-droplet-validation/tap-reporter:latest
           imagePullPolicy: Always
           env:
             - name: RUN_ID
