@@ -87,7 +87,7 @@ On the host:
 
 ```bash
 curl -fsSL \
-  "https://github.com/DO-Solutions/gpu-droplet-validation/releases/latest/download/gpu-droplet-validation-latest.tgz" \
+  "https://github.com/DO-FDE/gpu-droplet-validation/releases/latest/download/gpu-droplet-validation-latest.tgz" \
   | tar --no-same-owner -xz
 
 # Use the new --gpu-model once the arm exists locally / in a candidate release.

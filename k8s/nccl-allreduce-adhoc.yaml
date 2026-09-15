@@ -26,7 +26,7 @@
 #  - The command flags mirror exactly what the suite's entrypoint runs
 #    (containers/nccl-tests-nvidia/entrypoint.sh): -b 32K -e 8G -f 2 -g 8 -w 5 -n 20.
 #  - The binary path /opt/nccl-tests/build/ is fixed by the pinned nccl-tests
-#    image (ghcr.io/do-solutions/nccl-tests, mirrored upstream nvidia/nccl-tests);
+#    image (ghcr.io/do-fde/nccl-tests, mirrored upstream nvidia/nccl-tests);
 #    it only moves on a deliberate base-image refresh. If a future image moves
 #    it, the entrypoint's find_bin still locates it — drop the `command:`
 #    override to fall back to the entrypoint (which then also applies the floor).
@@ -55,7 +55,7 @@ spec:
   hostIPC: true                              # NCCL single-node shared-mem transport
   containers:
     - name: nccl
-      image: ghcr.io/do-solutions/gpu-droplet-validation/nccl-tests-nvidia:latest
+      image: ghcr.io/do-fde/gpu-droplet-validation/nccl-tests-nvidia:latest
       imagePullPolicy: Always
       # Run the nccl-tests binary directly instead of the image's entrypoint:
       # output streams to stdout (kubectl logs) and the Pod exits when it ends.

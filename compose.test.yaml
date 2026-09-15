@@ -13,7 +13,7 @@
 
 services:
   prereqs:
-    image: ghcr.io/do-solutions/gpu-droplet-validation/prereqs-test:${VERSION:-latest}
+    image: ghcr.io/do-fde/gpu-droplet-validation/prereqs-test:${VERSION:-latest}
     container_name: dv-prereqs
     environment:
       RUN_ID: ${RUN_ID:-}
@@ -21,7 +21,7 @@ services:
       - ${RESULTS_DIR:-./results}:/results
 
   setup:
-    image: ghcr.io/do-solutions/gpu-droplet-validation/setup-test:${VERSION:-latest}
+    image: ghcr.io/do-fde/gpu-droplet-validation/setup-test:${VERSION:-latest}
     container_name: dv-setup
     environment:
       RUN_ID: ${RUN_ID:-}
@@ -32,7 +32,7 @@ services:
         condition: service_completed_successfully
 
   mock-test:
-    image: ghcr.io/do-solutions/gpu-droplet-validation/mock-test:${VERSION:-latest}
+    image: ghcr.io/do-fde/gpu-droplet-validation/mock-test:${VERSION:-latest}
     container_name: dv-mock-test
     environment:
       RUN_ID: ${RUN_ID:-}
@@ -43,7 +43,7 @@ services:
         condition: service_completed_successfully
 
   teardown:
-    image: ghcr.io/do-solutions/gpu-droplet-validation/teardown-test:${VERSION:-latest}
+    image: ghcr.io/do-fde/gpu-droplet-validation/teardown-test:${VERSION:-latest}
     container_name: dv-teardown
     environment:
       RUN_ID: ${RUN_ID:-}
@@ -58,7 +58,7 @@ services:
         condition: service_completed_successfully
 
   tap-reporter:
-    image: ghcr.io/do-solutions/gpu-droplet-validation/tap-reporter:${VERSION:-latest}
+    image: ghcr.io/do-fde/gpu-droplet-validation/tap-reporter:${VERSION:-latest}
     container_name: dv-tap-reporter
     environment:
       RUN_ID: ${RUN_ID:-}

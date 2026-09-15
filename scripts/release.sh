@@ -19,8 +19,8 @@ set -euo pipefail
 REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$REPO_ROOT"
 
-REGISTRY="ghcr.io/do-solutions/gpu-droplet-validation"
-GH_OWNER="DO-Solutions"
+REGISTRY="ghcr.io/do-fde/gpu-droplet-validation"
+GH_OWNER="DO-FDE"
 GH_REPO="gpu-droplet-validation"
 GH_SLUG="$GH_OWNER/$GH_REPO"
 

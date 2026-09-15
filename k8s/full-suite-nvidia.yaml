@@ -67,7 +67,7 @@ spec:
           emptyDir: {}
       initContainers:
         - name: prereqs
-          image: ghcr.io/do-solutions/gpu-droplet-validation/prereqs-nvidia:latest
+          image: ghcr.io/do-fde/gpu-droplet-validation/prereqs-nvidia:latest
           imagePullPolicy: Always
           securityContext:
             privileged: true
@@ -93,7 +93,7 @@ spec:
             - name: results
               mountPath: /results
         - name: setup
-          image: ghcr.io/do-solutions/gpu-droplet-validation/setup-nvidia:latest
+          image: ghcr.io/do-fde/gpu-droplet-validation/setup-nvidia:latest
           imagePullPolicy: Always
           securityContext:
             privileged: true
@@ -119,7 +119,7 @@ spec:
             - name: results
               mountPath: /results
         - name: dcgm-diag
-          image: ghcr.io/do-solutions/gpu-droplet-validation/dcgm-diag:latest
+          image: ghcr.io/do-fde/gpu-droplet-validation/dcgm-diag:latest
           imagePullPolicy: Always
           securityContext:
             privileged: true
@@ -145,7 +145,7 @@ spec:
             - name: results
               mountPath: /results
         - name: nccl-allreduce
-          image: ghcr.io/do-solutions/gpu-droplet-validation/nccl-tests-nvidia:latest
+          image: ghcr.io/do-fde/gpu-droplet-validation/nccl-tests-nvidia:latest
           imagePullPolicy: Always
           securityContext:
             privileged: true
@@ -173,7 +173,7 @@ spec:
             - name: results
               mountPath: /results
         - name: nccl-alltoall
-          image: ghcr.io/do-solutions/gpu-droplet-validation/nccl-tests-nvidia:latest
+          image: ghcr.io/do-fde/gpu-droplet-validation/nccl-tests-nvidia:latest
           imagePullPolicy: Always
           securityContext:
             privileged: true
@@ -201,7 +201,7 @@ spec:
             - name: results
               mountPath: /results
         - name: teardown
-          image: ghcr.io/do-solutions/gpu-droplet-validation/teardown-nvidia:latest
+          image: ghcr.io/do-fde/gpu-droplet-validation/teardown-nvidia:latest
           imagePullPolicy: Always
           securityContext:
             privileged: true
@@ -228,7 +228,7 @@ spec:
               mountPath: /results
       containers:
         - name: tap-reporter
-          image: ghcr.io/do-solutions/gpu-droplet-validation/tap-reporter:latest
+          image: ghcr.io/do-fde/gpu-droplet-validation/tap-reporter:latest
           imagePullPolicy: Always
           env:
             - name: RUN_ID

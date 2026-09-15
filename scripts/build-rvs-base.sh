@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Build & push the prebuilt rvs-base image:
-#   ghcr.io/do-solutions/rvs-base:rocm<ROCM_VER>
+#   ghcr.io/do-fde/rvs-base:rocm<ROCM_VER>
 #
 # OUT-OF-BAND and INFREQUENT. The RVS binary is slow to compile, so it is
 # baked into this base image once and the per-release amd-* images just
@@ -35,7 +35,7 @@ ROCM_IMAGE_TAG="${ROCM_IMAGE_TAG:-${ROCM_VER}-complete}"
 # NOT `develop` (RVS 3.x: dropped pbqt, hangs on pqt on VF hosts) and NOT
 # the rocm-${ROCM_VER} tag (old 1.2.0, no summary table).
 RVS_REF="${RVS_REF:-44c0022bbb8f14d060c0a11f36abbeee49b85d04}"
-IMAGE="ghcr.io/do-solutions/rvs-base:rocm${ROCM_VER}"
+IMAGE="ghcr.io/do-fde/rvs-base:rocm${ROCM_VER}"
 
 DRY_RUN=0
 [ "${1:-}" = "--dry-run" ] && DRY_RUN=1

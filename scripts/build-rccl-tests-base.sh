@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Build & push the prebuilt rccl-tests base image:
-#   ghcr.io/do-solutions/rccl-tests:rocm<ROCM_VER>
+#   ghcr.io/do-fde/rccl-tests:rocm<ROCM_VER>
 #
 # OUT-OF-BAND and INFREQUENT — mirrors the external nccl-tests base-image
 # pattern. NOT run by scripts/release.sh; run only when the pinned
@@ -29,7 +29,7 @@ cd "$REPO_ROOT"
 ROCM_VER="${ROCM_VER:-7.2.1}"
 ROCM_IMAGE_TAG="${ROCM_IMAGE_TAG:-${ROCM_VER}-complete}"
 RCCL_TESTS_REF="${RCCL_TESTS_REF:-40b1b17901370a7880d4a56854b5361c89f8d324}"
-IMAGE="ghcr.io/do-solutions/rccl-tests:rocm${ROCM_VER}"
+IMAGE="ghcr.io/do-fde/rccl-tests:rocm${ROCM_VER}"
 
 DRY_RUN=0
 [ "${1:-}" = "--dry-run" ] && DRY_RUN=1

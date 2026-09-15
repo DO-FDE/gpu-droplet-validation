@@ -22,7 +22,7 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 REGISTRY="ghcr.io"
-REPO_PREFIX="do-solutions/gpu-droplet-validation"
+REPO_PREFIX="do-fde/gpu-droplet-validation"
 JOB_PREFIX="gdv"
 
 GPU_MODEL="" GPU_COUNT="" NODE_ID="" REGION="" RUN_ID=""

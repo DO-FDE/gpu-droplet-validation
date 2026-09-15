@@ -26,7 +26,7 @@ coverage loop (calibrate → release → notify Foresight) lives in
   full-suite Job (`full-suite-amd.yaml`) plus one-off RVS/RCCL diagnostics.
   See [k8s-standalone.md](k8s-standalone.md).
 
-Images are published to `ghcr.io/do-solutions/gpu-droplet-validation/<name>`
+Images are published to `ghcr.io/do-fde/gpu-droplet-validation/<name>`
 with both `:$VERSION` and `:latest` tags on every release.
 
 ## Adding a new GPU SKU
@@ -98,8 +98,8 @@ tarball together; there is no partial per-family release.
 
 Two prebuilt base images underpin the AMD stack and are **not rebuilt per
 release** (they are slow to compile and published out-of-band):
-`ghcr.io/do-solutions/rvs-base` (compiled ROCm Validation Suite + ROCm
-runtime + amd-smi) and `ghcr.io/do-solutions/rccl-tests` (compiled
+`ghcr.io/do-fde/rvs-base` (compiled ROCm Validation Suite + ROCm
+runtime + amd-smi) and `ghcr.io/do-fde/rccl-tests` (compiled
 rccl-tests). All per-release AMD images `FROM` one of these. `rvs-base` is
 built for both `gfx942` (CDNA3: MI300X/MI325X) and `gfx950` (CDNA4:
 MI350X/MI355X).
@@ -109,10 +109,10 @@ needs a bump. Neither requires an AMD GPU to build — only the ROCm SDK — so
 they run on any Docker + buildx host (CI, laptop, build box):
 
 ```bash
-# ghcr.io/do-solutions/rvs-base:rocm<ver>   (compiled RVS + ROCm + amd-smi)
+# ghcr.io/do-fde/rvs-base:rocm<ver>   (compiled RVS + ROCm + amd-smi)
 scripts/build-rvs-base.sh           # --dry-run to preview
 
-# ghcr.io/do-solutions/rccl-tests:rocm<ver> (compiled rccl-tests)
+# ghcr.io/do-fde/rccl-tests:rocm<ver> (compiled rccl-tests)
 scripts/build-rccl-tests-base.sh    # --dry-run to preview
 ```
 

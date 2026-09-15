@@ -43,7 +43,7 @@ spec:
       effect: NoSchedule
   containers:
     - name: dcgm-diag
-      image: ghcr.io/do-solutions/gpu-droplet-validation/dcgm-diag:latest
+      image: ghcr.io/do-fde/gpu-droplet-validation/dcgm-diag:latest
       imagePullPolicy: Always
       # Default entrypoint: launch nv-hostengine, run dcgmi diag, parse to JSON.
       securityContext:
