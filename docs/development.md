@@ -2,7 +2,9 @@
 
 Internals you don't need just to run the suite: how the repo is laid out, how
 releases are cut and published, the out-of-band AMD base images, the
-test-family run-id dispatch, and how to add a new GPU SKU.
+test-family run-id dispatch, and how to add a new GPU SKU. The continuous
+coverage loop (calibrate → release → notify Foresight) lives in
+[sku-coverage.md](sku-coverage.md).
 
 ## Layout
 
@@ -38,11 +40,16 @@ else (no compose or image changes; the same five AMD containers serve every AMD
 SKU). The conf directory name **is** the `--gpu-model` value, so
 `amd_models.sh` resolves it with no extra mapping.
 
-Other `nvidia-*` and `amd-*` SKUs are not yet implemented in the full flow.
-The remaining AMD SKUs (`amd-mi300x`, `amd-mi355x`) ship vendored RVS confs but
-have no calibrated RCCL pass/fail floors, so the full `run.sh` flow still fails
-fast at `rccl-tests-amd` for them — see [k8s-standalone.md](k8s-standalone.md) for the
-one-off RVS path on those SKUs.
+That additive change is only half of shipping coverage: floors must be
+calibrated on real hardware, a release cut, and Foresight notified so
+Auto-ahoy enables the new `--gpu-model`. The full loop (new SKUs **and**
+keeping existing thresholds current) is in
+[sku-coverage.md](sku-coverage.md).
+
+Other `nvidia-*` / `amd-*` SKUs are not yet implemented in the full flow.
+`amd-mi300x` ships vendored RVS confs but has no calibrated RCCL pass/fail
+floors, so the full `run.sh` flow still fails fast at `rccl-tests-amd` for
+it — see [k8s-standalone.md](k8s-standalone.md) for the one-off RVS path.
 
 ## Test-family run-id dispatch
 

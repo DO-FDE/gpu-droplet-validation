@@ -121,12 +121,14 @@ code is therefore `1`.
 > **Adding a future AMD SKU** is a purely additive, two-file change: add
 > one `case` arm to
 > [`containers/_lib/amd_models.sh`](../containers/_lib/amd_models.sh) (its
-> model regex + VRAM) and drop in one vendored conf at
+> model regex + VRAM + RCCL floors) and drop in one vendored conf at
 > `containers/rvs/conf/<gpu-model>/rvs_level_4.conf` (sourced from the RVS
 > repo's `conf/<SKU>/levels`). The conf directory name **is** the
 > `--gpu-model` value, so `amd_models.sh` resolves it with no extra
 > mapping. No compose, image, or parser changes — the same five AMD
-> containers and the conf-agnostic RVS parser serve every AMD SKU.
+> containers and the conf-agnostic RVS parser serve every AMD SKU. After
+> calibrating on real hardware, cut a release and notify Foresight — see
+> [sku-coverage.md](sku-coverage.md).
 
 ### prereqs (5 points) — `containers/prereqs-amd/entrypoint.sh`
 
@@ -217,7 +219,7 @@ investigation:
 - `results/nccl-allreduce_dmon.log`, `results/nccl-alltoall_dmon.log` —
   `nvidia-smi dmon` samples (SM/util/mem/power) over the run window.
 
-For `amd-mi325x`:
+For `amd-mi325x` / `amd-mi350x` / `amd-mi355x`:
 
 - `results/rvs.log` — verbatim `rvs -c <conf> -d 3` text log (the
   `[RESULT]` stream + the summary table the parser reads).
@@ -225,6 +227,42 @@ For `amd-mi325x`:
   `results/rccl-alltoall_run1.log` … `_run3.log` — raw rccl-tests perf-run output.
 - `results/rccl-allreduce_dmon.log`, `results/rccl-alltoall_dmon.log` —
   `amd-smi monitor` samples over the run window.
+
+## `--gpu-model amd-mi350x`
+
+Same five AMD suites as `amd-mi325x` (prereqs → RVS level 4 → RCCL
+allreduce/alltoall → post-health). Thresholds come from
+[`containers/_lib/amd_models.sh`](../containers/_lib/amd_models.sh). Only
+SKU-specific gates differ:
+
+| Test | Threshold / criterion | What `not ok` means |
+|---|---|---|
+| `All GPUs match model regex /MI350X/` | Each GPU `MARKET_NAME` matches `MI350X` (case-insensitive) | Wrong SKU provisioned or a card swapped. |
+| `All GPUs report 294592 MiB VRAM` | `vram.size.value` equals `EXPECTED_VRAM_MIB` (294592 ≈ 288 GB HBM3E) | Bad/mis-binned card or wrong SKU. |
+| `RCCL all_reduce_perf mean busbw@8GB >= 370 GB/s` | Mean-of-3 in-place busbw@8GB ≥ **370 GB/s** | Fabric/PCIe regression vs MI350X expectation. Floor calibrated 2026-05-30 on one idle 8× MI350X host (min best 393.39 GB/s, ~6% headroom); single-host — revisit if a second host reads lower. |
+| `RCCL alltoall_perf mean busbw@8GB >= 330 GB/s` | Mean-of-3 in-place busbw@8GB ≥ **330 GB/s** | Same shape as allreduce; min best 349.10 GB/s on the calibration host. |
+
+RVS runs `containers/rvs/conf/amd-mi350x/rvs_level_4.conf` (includes CDNA4
+fp4/fp6/bf6 GST actions). Per-action TAP points remain conf-agnostic PASS/FAIL
+as on MI325X. Post-health points are identical across AMD SKUs.
+
+## `--gpu-model amd-mi355x`
+
+Same five AMD suites as `amd-mi350x`. Thresholds come from
+[`containers/_lib/amd_models.sh`](../containers/_lib/amd_models.sh). MI355X is
+the higher compute bin of the MI350 series with the **same** 288 GB HBM3E and
+**same** Infinity Fabric mesh (7×153.6 GB/s); the vendored RVS conf differs
+mainly in `power-stress` (`target_power` 1400 W).
+
+| Test | Threshold / criterion | What `not ok` means |
+|---|---|---|
+| `All GPUs match model regex /MI355X/` | Each GPU `MARKET_NAME` matches `MI355X` (case-insensitive) | Wrong SKU provisioned or a card swapped. |
+| `All GPUs report 294592 MiB VRAM` | `vram.size.value` equals `EXPECTED_VRAM_MIB` (294592 ≈ 288 GB HBM3E) | Bad/mis-binned card or wrong SKU. |
+| `RCCL all_reduce_perf mean busbw@8GB >= 370 GB/s` | Mean-of-3 in-place busbw@8GB ≥ **370 GB/s** | Fabric/PCIe regression. Floor calibrated 2026-09-07 on one idle 8× MI355X fabric host in mkc1 (min best 392.98 GB/s, run-to-run spread <0.3%, ~6% headroom); single-host — revisit if a second host reads lower. |
+| `RCCL alltoall_perf mean busbw@8GB >= 320 GB/s` | Mean-of-3 in-place busbw@8GB ≥ **320 GB/s** | Same shape as allreduce; min best 340.92 GB/s on the calibration host (~2% below the MI350X alltoall calibration, so the floor is 320 rather than 330). |
+
+RVS runs `containers/rvs/conf/amd-mi355x/rvs_level_4.conf`. Per-action TAP
+points and post-health checks match the other AMD SKUs.
 
 ## Adding new tests
 

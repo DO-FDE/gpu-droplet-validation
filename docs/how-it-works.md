@@ -27,9 +27,11 @@ The AMD path needs **no** container toolkit; `run.sh` is a no-op for `amd-*`.
 ROCm GPU access is plain `/dev/kfd` + `/dev/dri` device passthrough, wired in
 `compose.amd.yaml`.
 
-`amd-mi350x` rides the same five AMD containers as `amd-mi325x`; only the
-calibrated floors differ (288 GB HBM3E VRAM gate, higher RCCL busbw floors). The
-AMD stack `FROM`s two prebuilt base images published out-of-band — see
+`amd-mi350x` and `amd-mi355x` ride the same five AMD containers as
+`amd-mi325x`; only the calibrated floors and vendored RVS conf differ
+(MI350X/MI355X: 288 GB HBM3E VRAM gate and higher RCCL busbw floors than
+MI325X; MI355X's RVS `power-stress` targets 1400 W). The AMD stack `FROM`s
+two prebuilt base images published out-of-band — see
 [development.md](development.md#out-of-band-base-images-infrequent-amd-only).
 
 ## On Kubernetes

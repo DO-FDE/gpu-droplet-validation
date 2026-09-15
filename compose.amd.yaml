@@ -1,8 +1,8 @@
 # Real-hardware validation stack for every --gpu-model amd-* SKU.
 # Per-SKU thresholds resolved inside the containers via /lib/amd_models.sh
 # keyed on $GPU_MODEL (exported by run.sh). One image set covers every SKU
-# (mi325x now; mi350x/mi355x later) — adding a SKU is one amd_models.sh arm
-# plus one vendored RVS conf, no compose changes.
+# (mi325x / mi350x / mi355x) — adding a SKU is one amd_models.sh arm plus
+# one vendored RVS conf, no compose changes.
 #
 # GPU access is plain ROCm device passthrough: /dev/kfd (KFD compute) +
 # /dev/dri (DRM render nodes), with the video/render groups and the

@@ -54,15 +54,35 @@ case "$GPU_MODEL" in
     RCCL_ALLREDUCE_FLOOR=370
     RCCL_ALLTOALL_FLOOR=330
     ;;
+  amd-mi355x)
+    # MI355X (CDNA4, gfx950). Higher compute bin of the MI350 series; same
+    # 288 GB HBM3E and same Infinity Fabric mesh (7×153.6 GB/s) as MI350X.
+    # Matched against amd-smi MARKET_NAME "AMD Instinct MI355X VF".
+    EXPECTED_GPU_MODEL_REGEX="MI355X"
+    # amd-smi static --vram size.value on the MI355X VF host (288 GB HBM3E).
+    EXPECTED_VRAM_MIB=294592
+    # RCCL busbw@8GB floors (GB/s), mean-of-3, in-place column. Calibrated
+    # 2026-09-07 on an idle 8x MI355X VF fabric host
+    # (mi355x8-2304gb-fabric-contracted-mkc1-gpu-val / 165.245.192.180,
+    # mkc1, container ROCm 7.2.1 on host ROCm 7.14): allreduce min-best
+    # 392.98 (per-run 393.26/393.45/392.98, mean 393.23), alltoall min-best
+    # 340.92 (per-run 341.47/340.92/341.82, mean 341.40), run-to-run spread
+    # <0.3%. Floors sit ~6% below the min best run, matching the MI325X/
+    # MI350X margin. Allreduce matches MI350X; alltoall sits ~2% below the
+    # MI350X calibration host — floor is 320 (not 330) accordingly. NOTE:
+    # single-host calibration; revisit if a second MI355X host reads
+    # materially lower.
+    RCCL_ALLREDUCE_FLOOR=370
+    RCCL_ALLTOALL_FLOOR=320
+    ;;
   # RVS-one-off-only SKUs. These arms exist solely so the rvs entrypoint can
   # resolve RVS_CONF for a standalone, manual run (e.g. a k8s/ pod at
   # level 5 on an MI300X node) — they are NOT calibrated for the full
   # run.sh/compose validation flow. EXPECTED_VRAM_MIB=0 disables the prereqs
   # VRAM gate, and no RCCL_*_FLOOR is set on purpose: a full flow on these
-  # SKUs still fails fast at rccl-tests-amd (unset floor). amd-mi325x and
-  # amd-mi350x above are the fully-calibrated validation SKUs.
+  # SKUs still fails fast at rccl-tests-amd (unset floor). amd-mi325x,
+  # amd-mi350x, and amd-mi355x above are the fully-calibrated validation SKUs.
   amd-mi300x) EXPECTED_GPU_MODEL_REGEX="MI300X"; EXPECTED_VRAM_MIB=0 ;;
-  amd-mi355x) EXPECTED_GPU_MODEL_REGEX="MI355X"; EXPECTED_VRAM_MIB=0 ;;
   *)
     printf '[amd_models] unsupported GPU_MODEL: %s\n' "$GPU_MODEL" >&2
     exit 1

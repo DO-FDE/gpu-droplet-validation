@@ -24,12 +24,16 @@ whenever there is any doubt about the hardware.
 | `nvidia-b300`  | prereqs + setup + `dcgmi diag -r 3` + NCCL allreduce/alltoall + post-health |
 | `amd-mi325x`   | prereqs + setup + `rvs -c <conf>` (level 4) + RCCL allreduce/alltoall + post-health |
 | `amd-mi350x`   | prereqs + setup + `rvs -c <conf>` (level 4) + RCCL allreduce/alltoall + post-health |
+| `amd-mi355x`   | prereqs + setup + `rvs -c <conf>` (level 4) + RCCL allreduce/alltoall + post-health |
 
 Per-SKU TAP point breakdown — every threshold, pass/fail criterion, and what an
 `ok` vs `not ok` means for triage — is in [docs/test-suite.md](docs/test-suite.md).
 Other `nvidia-*` / `amd-*` SKUs are not yet calibrated in the full flow; adding
-one, or running an uncalibrated AMD SKU as a one-off, is covered in
-[docs/development.md](docs/development.md) and [docs/k8s-standalone.md](docs/k8s-standalone.md).
+one (and notifying Foresight so Auto-ahoy picks it up), or running an
+uncalibrated AMD SKU as a one-off, is covered in
+[docs/sku-coverage.md](docs/sku-coverage.md),
+[docs/development.md](docs/development.md), and
+[docs/k8s-standalone.md](docs/k8s-standalone.md).
 
 ## Running it — release tarball
 
@@ -37,17 +41,17 @@ Download and extract the latest release, then run `run.sh` for your SKU:
 
 ```bash
 curl -fsSL \
-  "https://github.com/DO-Solutions/gpu-droplet-validation/releases/latest/download/gpu-droplet-validation-latest.tgz" \
+  "https://github.com/DO-FDE/gpu-droplet-validation/releases/latest/download/gpu-droplet-validation-latest.tgz" \
   | tar --no-same-owner -xz
 
 sudo ./run.sh --gpu-model nvidia-b300 --gpu-count 8 \
   --node-id my-b300-droplet --region mkc1 --run-id b300-001
 ```
 
-Swap `--gpu-model` for `amd-mi325x` or `amd-mi350x` to validate those SKUs; the
-invocation is otherwise identical. To pin to a specific release, replace
-`latest/download` with `download/v1.YYYYMMDD.HHMMSS` and `-latest.tgz` with
-`-v1.YYYYMMDD.HHMMSS.tgz`.
+Swap `--gpu-model` for `amd-mi325x`, `amd-mi350x`, or `amd-mi355x` to validate
+those SKUs; the invocation is otherwise identical. To pin to a specific
+release, replace `latest/download` with `download/v1.YYYYMMDD.HHMMSS` and
+`-latest.tgz` with `-v1.YYYYMMDD.HHMMSS.tgz`.
 
 What `run.sh` does under the hood — compose stack selection, Docker/toolkit
 install, and the per-vendor GPU access path — is in
@@ -64,7 +68,7 @@ concurrently, with no cross-node coordination. See
 
 ```bash
 curl -fsSL \
-  "https://github.com/DO-Solutions/gpu-droplet-validation/releases/latest/download/gpu-droplet-validation-latest.tgz" \
+  "https://github.com/DO-FDE/gpu-droplet-validation/releases/latest/download/gpu-droplet-validation-latest.tgz" \
   | tar --no-same-owner -xz
 
 # one node
@@ -155,6 +159,8 @@ through compose.
 - [docs/how-it-works.md](docs/how-it-works.md) — what `run.sh`/`run-k8s.sh` do
   under the hood and the per-vendor GPU access path.
 - [docs/test-suite.md](docs/test-suite.md) — per-SKU TAP point reference.
+- [docs/sku-coverage.md](docs/sku-coverage.md) — continuous loop for new node
+  types, threshold refresh, and Foresight / Auto-ahoy handoff.
 - [docs/k8s-standalone.md](docs/k8s-standalone.md) — standalone `kubectl apply` manifests
   and one-off diagnostics (AMD RVS/RCCL, NVIDIA DCGM/NCCL).
 - [docs/development.md](docs/development.md) — repo layout, releasing, out-of-band

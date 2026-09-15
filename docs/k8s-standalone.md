@@ -93,10 +93,9 @@ and 5** for **MI300X, MI325X, MI350X, MI355X** (mirrored verbatim from upstream
 Select with `GPU_MODEL` + `RVS_LEVEL` (default `4`); `rvs-base` is built for
 both `gfx942` (CDNA3: MI300X/MI325X) and `gfx950` (CDNA4: MI350X/MI355X). This
 is **one-off only** — the official `run.sh`/compose flow is calibrated for
-**`amd-mi325x` and `amd-mi350x` (level 4)**, while the remaining SKUs
-(`amd-mi300x`, `amd-mi355x`) have no calibrated pass/fail floors (the RVS log is
-the signal). Running the full flow on an uncalibrated SKU still fails fast at
-`rccl-tests-amd` (unset floor).
+**`amd-mi325x`, `amd-mi350x`, and `amd-mi355x` (level 4)**. `amd-mi300x` has
+no calibrated pass/fail floors (the RVS log is the signal). Running the full
+flow on an uncalibrated SKU still fails fast at `rccl-tests-amd` (unset floor).
 
 ### `rvs-mi350x-level5.yaml` — RVS level-5 soak on one MI350X node
 
@@ -167,8 +166,9 @@ Because the manifest runs the binary directly, it **bypasses the
 `rccl-tests-amd` entrypoint**: there is no `amd_models.sh`, no `GPU_MODEL`, and
 **no pass/fail floor**. The signal is the per-size busbw table and the
 `Avg bus bandwidth` line in the logs. For a calibrated pass/fail run, use the
-full `run.sh` / compose flow on `amd-mi325x`, where the entrypoint gates
-mean-of-3 busbw@8GB against `RCCL_ALLREDUCE_FLOOR=300` GB/s
+full `run.sh` / compose flow on a calibrated AMD SKU (`amd-mi325x`,
+`amd-mi350x`, or `amd-mi355x`), where the entrypoint gates mean-of-3 busbw@8GB
+against the floors in
 ([`../containers/_lib/amd_models.sh`](../containers/_lib/amd_models.sh)).
 
 ### Retargeting
@@ -183,11 +183,12 @@ The flags mirror exactly what the suite's entrypoint runs:
 
 ### Why this is one-off only
 
-`amd-mi300x/350x/355x` have RVS-only arms in
-[`../containers/_lib/amd_models.sh`](../containers/_lib/amd_models.sh): they
-resolve `RVS_CONF` but set no RCCL floors and disable the VRAM gate, so the full
-`run.sh` flow still fails fast for them. Only `amd-mi325x` (level 4) is
-calibrated end to end. The vendored confs are mirrored verbatim from upstream
+`amd-mi300x` has an RVS-only arm in
+[`../containers/_lib/amd_models.sh`](../containers/_lib/amd_models.sh): it
+resolves `RVS_CONF` but sets no RCCL floors and disables the VRAM gate, so the
+full `run.sh` flow still fails fast for it. `amd-mi325x`, `amd-mi350x`, and
+`amd-mi355x` (level 4) are calibrated end to end. The vendored confs are
+mirrored verbatim from upstream
 `ROCmValidationSuite/rvs/conf/<MODEL>/levels/`.
 
 ## `dcgm-b300-adhoc.yaml` — diagnostic DCGM diag on one NVIDIA node

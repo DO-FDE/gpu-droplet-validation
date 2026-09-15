@@ -1,8 +1,9 @@
 # One-off: run the rvs container's RVS level-5 long soak on a single
 # MI350X node. Standalone Pod — no Helm, no compose, no validation chain.
 # This is NOT the calibrated validation flow (the official run.sh flow is
-# amd-mi325x level 4 only); it just exercises RVS on a GPU type we do not
-# yet fully validate. There are no pass/fail floors for non-mi325x SKUs —
+# calibrated for amd-mi325x / amd-mi350x / amd-mi355x at level 4); it just
+# exercises RVS in isolation — useful for long soaks or SKUs without full
+# floors (amd-mi300x). There are no RCCL pass/fail floors on this path.
 # the RVS [RESULT] stream + end-of-run summary table in the logs are the
 # signal.
 #
@@ -71,7 +72,7 @@ spec:
         - name: RUN_ID
           value: "mi350x-rvs-l5-001"
         - name: GPU_MODEL
-          value: "amd-mi350x"      # real SKU — RVS-only arm in amd_models.sh
+          value: "amd-mi350x"      # real SKU — thresholds resolve in amd_models.sh
         - name: RVS_LEVEL
           value: "5"               # 5 = long soak; 4 = quick (~minutes)
         - name: RVS_TIMEOUT
